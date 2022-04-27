@@ -3,14 +3,14 @@
 ## Navigation
 
 >>>
-* [Вступительное слово](#how-it-works)
-* [Сервисы](#install-and-start)
-  * [0. Landing Page](#python-modules)
-  * [1. Task Tracker](#uwsgi)
+* [Вступительное слово](#вступительное-слово)
+* [Сервисы](#сервисы)
+  * [0. Landing Page](#0-landing-page)
+  * [1. Task Tracker](#1-task-tracker)
   * [Virtualenv](#virtualenv)
   * [Cloning and setting up the application](#cloning-and-setting-up-the-application)
   * [Deploy](#deploy)
-  * [5. DB Replicator](#django-settings)
+  * [5. DB Replicator](#5-db-replicator)
 >>>
 
 ## Вступительное слово
@@ -46,7 +46,7 @@ uberpopug.com
 1.1: Передача данных в репликатор - сюда передаем данные для Аккаунтинга и Аналитики - по двум действиям - ассайну на сотрудника и закрытию задачи (user_id, type (assign/close), price)
 
 *Важно!*
-Рекомендую сразу перейти к 
+Рекомендую сразу перейти к [5. DB Replicator](#5-db-replicator), а потом вернуться - так будет понятнее.
 
 ### 5. DB Replicator
 
