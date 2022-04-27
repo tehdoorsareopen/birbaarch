@@ -4,6 +4,7 @@
 
 >>>
 * [Вступительное слово](#вступительное-слово)
+* [Схема](#схема)
 * [Сервисы](#сервисы)
   * [0. Landing Page](#0-landing-page)
   * [1. Task Tracker](#1-task-tracker)
@@ -12,6 +13,10 @@
   * [Deploy](#deploy)
   * [5. DB Replicator](#5-db-replicator)
 >>>
+
+## Схема
+
+![схему](/scheme.png)
 
 ## Вступительное слово
 
