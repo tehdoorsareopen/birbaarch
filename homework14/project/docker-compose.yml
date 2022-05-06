@@ -1,0 +1,74 @@
+version: '3.8'
+
+services:
+  auth:
+    build: ./auth
+    environment:
+      - ID=${ID}
+      - SECRET=${SECRET}
+    command: python src/manage.py runserver 0.0.0.0:3000
+    ports:
+      - 3000:3000
+    working_dir: /app
+    volumes: 
+      - ./auth:/app
+    depends_on:
+      - auth-db
+      - broker
+
+  auth-db:
+    image: postgres:14.2-alpine
+    volumes:
+      - postgres_auth_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=birb_auth_user
+      - POSTGRES_PASSWORD=passw0rd!
+      - POSTGRES_DB=birb_auth_db
+
+  taskmanager:
+    build: ./taskmanager
+    command: python src/manage.py runserver 0.0.0.0:3030
+    ports:
+      - 3030:3030
+    working_dir: /app
+    volumes: 
+      - ./taskmanager:/app
+    depends_on:
+      - taskmanager-db
+      - broker
+
+  taskmanager-db:
+    image: postgres:14.2-alpine
+    volumes:
+      - postgres_taskmanager_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=birb_taskmanager_user
+      - POSTGRES_PASSWORD=passw0rd!
+      - POSTGRES_DB=birb_taskmanager_db
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.0.1
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
+  broker:
+    image: confluentinc/cp-kafka:7.0.1
+    container_name: broker
+    ports:
+      - 9092:9092
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092,PLAINTEXT_INTERNAL://broker:29092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+
+volumes:
+  postgres_auth_data:
+  postgres_taskmanager_data:
