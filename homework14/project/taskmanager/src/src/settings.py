@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-j4z1s9ed=-94r25n4sx-_eivsv37s9)ink5a)wh^z@!(zhs808
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'host.docker.internal']
 
 # Auth user model
 
@@ -51,6 +51,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'taskmanager.middleware.AppAuthMiddleware',
 ]
 
 ROOT_URLCONF = 'src.urls'
@@ -131,3 +132,10 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTH_APP_ID = 'm3vbKHa5dtiFmw4eb1VV4jMcIJELXYW11CV7WtL8'
+AUTH_APP_SECRET = 'uODkkvsI4j9mUqtCECdVc3GCKWEgLCKPCIqsJCRk2li4oIDFi9mXXoGZFY7EPa7340Ex4BygS4XVrUigEm3wDg5ZSGLyIhTtpXaXKIusi3MIDnhYi6ynTM7Un2qVxQQO'
+AUTH_APP_GET_CURRENT_USER_URL = 'http://host.docker.internal:3000/users/current/'
+AUTH_APP_LOGIN_FORM_URL = 'http://localhost:3000/users/login/'
+
+BROKER_SERVER = 'broker:29092'

@@ -1,0 +1,56 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script type="text/javascript" src="{% static 'jquery/jquery-3.5.1.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'jquery/jquery.validate.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'jquery/jquery.address.js' %}"></script>
+  <script type="text/javascript" src="{% static 'semantic/semantic.min.js' %}"></script>
+
+  <link rel="stylesheet" href="{% static 'semantic/semantic.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <title>{% block title %}Birb Auth{% endblock %}</title>
+</head>
+<body>
+  <header>
+    {% block header %}
+    <div class="ui top menu">
+      <div class="item">
+        <img src="{% static 'img/logo.png' %}">
+      </div>
+      {% block header_items %}
+        
+
+          {% if user.is_authenticated %}            
+            <div id="set-current-tenant">
+              <select class="ui search selection dropdown" id="tenant-select">
+                {% for tenant in user_tenants %}
+                  <option value="{{ tenant.id }}" {% if tenant.id == current_tenant_id %}selected{% endif %}>
+                    {{ tenant.name }}
+                  </option>
+                {% endfor %}
+              </select>
+            </div>
+          {% endif %}
+        {% endblock %}
+
+      <div class="right menu">
+        {% if user.is_authenticated %}
+          <span class="item current-user" id="{{user.id}}"><i class="user outline icon"></i> {{ user.username }}</span>
+          <a class="item" href="{% url 'users:logout' %}"><i class="sign-out alternate icon"></i> Logout</a>
+        {% else %}
+          <a class="item" href="{% url 'users:login' %}"><i class="sign-in alternate icon"></i> Login</a>
+        {% endif %}
+      </div>
+    </div>
+    {% endblock %}
+  </header>
+  <div class="ui main text container">
+    {% block content %}{% endblock %}
+  </div>
+  <footer>
+    {% block footer %}{% endblock %}
+    
+  </footer>
+</body>
+</html>
