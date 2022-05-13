@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="ui header">Create task</h1>
+
+<form class="ui form attached fluid segment" method="post" action="{% url 'taskmanager:create_task' %}">
+    {% csrf_token %}
+    {{ form }}
+    <button class="ui fluid primary button" type="submit">Login</button>
+</form>
+
+{% endblock %}

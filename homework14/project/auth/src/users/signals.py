@@ -19,18 +19,20 @@ def on_send_error(excp):
     print(excp)
 
 
+# CUD Events
 @receiver(post_save, sender=User)
 def produce_create_or_update_user_event(sender, instance, **kwargs):
     broker = settings.BROKER_SERVER
     producer = KafkaProducer(bootstrap_servers=broker)
     user = instance
     data = {
-        'action': 'create/update',
+        'event': 'created/updated',
         'user': {
             'system_id': user.system_id,
             'username': user.username,
             'first_name': user.first_name,
             'last_name': user.last_name,
+            'role': user.role.name,
         }
     }
 
@@ -44,7 +46,7 @@ def produce_delete_user_event(sender, instance, **kwargs):
     producer = KafkaProducer(bootstrap_servers=broker)
     user = instance
     data = {
-        'action': 'delete',
+        'event': 'deleted',
         'user': {
             'system_id': user.system_id,
         }

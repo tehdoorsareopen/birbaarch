@@ -10,3 +10,18 @@
 ----/docs      # Проектирование
 ----/project   # Имплементация
 ```
+
+# Events
+
+## Auth
+
+```
+CUD -> [TaskManager]: user CUD
+    -> []
+```
+
+## Task Manager
+
+```
+CUD -> []
+```

@@ -1,9 +1,14 @@
+import json
+
 import urllib.request
 import urllib.parse
 from urllib.error import HTTPError
 
 from django.conf import settings
+from django.contrib.auth import login
 from django.shortcuts import redirect
+
+from .models import User
 
 
 class AppAuthMiddleware:
@@ -40,44 +45,16 @@ class AppAuthMiddleware:
             }
             req = urllib.request.Request(self.auth_app_get_current_user_url, headers=headers)
             resp = urllib.request.urlopen(req)
-            print(resp.read())
+            resp_data = json.loads(resp.read())
+            user_system_id = resp_data['user']
+            user = User.objects.get(system_id=user_system_id)
+            request.user = user
         except HTTPError as e:
+            del request.user
             if e.code == 401:  # Unauthorized
                 return self.auth_redirect(current_url)
         except Exception as e:
             print(e)
-
-
-
-
-
-        # tenant_id = request.session.get('tenant_id', -1)
-        # user = request.user
-        # tenant_user_object = None
-        # tenant_user_objects = []
-
-        # if hasattr(user, 'tenants') and tenant_id == -1 and request.path.startswith('/users/profile/'):
-        #     default_tenant = user.tenants.first()
-        #     tenant_id = default_tenant.pk
-        #     request.session['tenant_id'] = int(tenant_id)
-
-        # # Checking if tenant_id in user_tenants
-        # if not user.is_superuser and hasattr(user, 'tenant_set') and tenant_id not in [t.id for t in user.tenant_set.all()]:
-        #     tenant_id = -1
-
-        # if user.is_authenticated:
-        #     if tenant_id == -1:
-        #         for tenant in user.tenant_set.all():
-        #             tenant_user_objects.append(user.tenantuser_set.get(tenant=tenant))
-        #     else:  # if current tenant is set
-        #         try:
-        #             tenant_user_object = user.tenantuser_set.get(tenant__id=tenant_id)
-        #         except Exception:
-        #             pass
-
-        # request.tenant_id = tenant_id
-        # request.tenant_user_object = tenant_user_object
-        # request.tenant_user_objects = tenant_user_objects
 
         response = self.get_response(request)
 

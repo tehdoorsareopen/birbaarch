@@ -19,7 +19,7 @@ class Command(BaseCommand):
 
         for message in consumer:
             deserialized_data = pickle.loads(message.value)
-            user_func = self.delete_user if deserialized_data['action'] == 'delete' else self.update_or_create_user
+            user_func = self.delete_user if deserialized_data['event'] == 'deleted' else self.update_or_create_user
             user_func(deserialized_data['user'])
             print(User.objects.all())
 
@@ -32,6 +32,7 @@ class Command(BaseCommand):
                 'username': user_data['username'],
                 'first_name': user_data['first_name'],
                 'last_name': user_data['last_name'],
+                'role': user_data['role'],
             },
         )
 

@@ -1,0 +1,49 @@
+.main.container {
+    margin-top: 3em;
+}
+
+.ui.table {
+    font-size: 14px;
+}
+
+.ui.menu {
+    border-radius: 0;
+}
+
+.ui.menu .item a.button {
+    background: #e0e1e2 none;
+    color: rgba(0,0,0,.6);
+    position: relative;
+    top: 0;
+    margin: -0.5em 0;
+    padding-bottom: 0.78571429em;
+    padding-top: 0.78571429em;
+    font-size: 1em;
+    cursor: pointer;
+    display: inline-block;
+    min-height: 1em;
+    outline: 0;
+    border: none;
+    vertical-align: baseline;
+    font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
+    margin: 0 0.25em 0 0;
+    padding: 0.78571429em 1.5em 0.78571429em;
+    text-transform: none;
+    text-shadow: none;
+    font-weight: 700;
+    line-height: 1em;
+    font-style: normal;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 0.28571429rem;
+}
+
+.ui.menu .item a.button.primary {
+    background-color: #2185d0;
+    color: #fff;
+}
+
+.ui.menu .item a.button.reassign {
+    background-color: #21ba45;
+    color: #fff;
+}

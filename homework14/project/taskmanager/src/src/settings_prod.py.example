@@ -1,0 +1,28 @@
+# General Settings
+DEBUG = True
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'host.docker.internal']
+
+# Database Settings
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'birb_taskmanager_db',
+        'USER': 'birb_taskmanager_user',
+        'PASSWORD': 'passw0rd!',
+        'HOST': 'taskmanager-db',
+        'PORT': 5432,
+    }
+}
+
+# Auth Service Settings
+# home
+# AUTH_APP_ID = 'm3vbKHa5dtiFmw4eb1VV4jMcIJELXYW11CV7WtL8'
+# AUTH_APP_SECRET = 'uODkkvsI4j9mUqtCECdVc3GCKWEgLCKPCIqsJCRk2li4oIDFi9mXXoGZFY7EPa7340Ex4BygS4XVrUigEm3wDg5ZSGLyIhTtpXaXKIusi3MIDnhYi6ynTM7Un2qVxQQO'
+# work
+AUTH_APP_ID = 'e1zLOYg1tWLmEaMWWf16P5x4jk6btdwIFY8zdiX0'
+AUTH_APP_SECRET = '6WtXaj8L60FZuPn3IaDWRIhFDO2Wr88z05CMRw69NE7DZl7VJxGDOh1lGGRcrDRXD0uReFdZFkrjdQkanimCtjwZDiSiee3bxC6ggF4Hh3DSlTUtz6ygxahghSsjVjKj'
+AUTH_APP_GET_CURRENT_USER_URL = 'http://host.docker.internal:3000/users/current/'
+AUTH_APP_LOGIN_FORM_URL = 'http://localhost:3000/users/login/'
+
+# Broker Settings
+BROKER_SERVER = 'broker:29092'

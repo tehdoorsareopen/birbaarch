@@ -1,1 +1,31 @@
-test {{ latest_question_list }}
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="ui header">Tasks</h1>
+
+<table class="ui compact table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <th>CreatedBy</th>
+      <th>AssignedOn</th>
+      <th>Completed</th>
+      <th>Created</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for task in tasks %}
+    <tr>
+      <td><a href="{% url 'taskmanager:view_task' task.id %}">{{ task.name }}</a></td>
+      <td>{{ task.description }}</td>
+      <td>{{ task.created_by }}</td>
+      <td>{{ task.assigned_on }}</td>
+      <td>{{ task.completed }}</td>
+      <td>{{ task.created|date:'Y-m-d' }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

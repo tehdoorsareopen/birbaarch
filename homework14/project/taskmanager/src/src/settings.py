@@ -12,20 +12,19 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 import os
 from pathlib import Path
 
+try:
+    from .settings_prod import *
+except ImportError as e:
+    print(f'Import error: {e}')
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-j4z1s9ed=-94r25n4sx-_eivsv37s9)ink5a)wh^z@!(zhs808'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'host.docker.internal']
 
 # Auth user model
 
@@ -69,6 +68,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'taskmanager.context_processors.context',
             ],
         },
     },
@@ -79,17 +79,6 @@ WSGI_APPLICATION = 'src.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'birb_taskmanager_db',
-        'USER': 'birb_taskmanager_user',
-        'PASSWORD': 'passw0rd!',
-        'HOST': 'taskmanager-db',
-        'PORT': 5432,
-    }
-}
 
 
 # Password validation
@@ -126,16 +115,16 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'my_static'),
+)
+STATIC_URL = '/static/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-AUTH_APP_ID = 'm3vbKHa5dtiFmw4eb1VV4jMcIJELXYW11CV7WtL8'
-AUTH_APP_SECRET = 'uODkkvsI4j9mUqtCECdVc3GCKWEgLCKPCIqsJCRk2li4oIDFi9mXXoGZFY7EPa7340Ex4BygS4XVrUigEm3wDg5ZSGLyIhTtpXaXKIusi3MIDnhYi6ynTM7Un2qVxQQO'
-AUTH_APP_GET_CURRENT_USER_URL = 'http://host.docker.internal:3000/users/current/'
-AUTH_APP_LOGIN_FORM_URL = 'http://localhost:3000/users/login/'
-
-BROKER_SERVER = 'broker:29092'

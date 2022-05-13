@@ -4,7 +4,10 @@ import urllib.parse
 import urllib.request
 
 from django.contrib.auth import authenticate, login
+from django.contrib.auth import views as auth_views
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
 
@@ -15,6 +18,13 @@ from oauth2_provider.contrib.rest_framework import TokenHasReadWriteScope, Token
 
 from .models import User
 from .serializers import UserSerializer
+
+
+login_url = '/users/login/'
+
+
+class UserLogout(auth_views.LogoutView):
+    template_name = 'registration/logout.html'
 
 
 class UserDetails(generics.RetrieveAPIView):
@@ -42,31 +52,32 @@ def user_login(request):
             if user.is_active:
                 login(request, user)
                 # getting token and redirecting
-                app_id = request.session['app_id']
-                app_secret = request.session['app_secret']
-                creds = base64.b64encode(f'{app_id}:{app_secret}'.encode('ascii')).decode('ascii')
-                print(creds)
-                headers = {
-                    'Authorization': f'Basic {creds}'
-                }
-                print(headers)
-                data = {
-                    'grant_type': 'password',
-                    'username': username,
-                    'password': password
-                }
-                req = urllib.request.Request(
-                    'http://host.docker.internal:3000/o/token/',
-                    method='POST',
-                    data=urllib.parse.urlencode(data).encode('ascii'),
-                    headers=headers
-                )
-                resp = urllib.request.urlopen(req)
-                data = json.loads(resp.read())
-                # messages.success(request, data)
-                redirect_url = request.session.get('callback_url') + '?token=' + data['access_token']
-                # messages.success(request, redirect_url)
-                return redirect(redirect_url)
+                app_id = request.session.get('app_id')
+                app_secret = request.session.get('app_secret')
+                if app_id and app_secret:
+                    creds = base64.b64encode(f'{app_id}:{app_secret}'.encode('ascii')).decode('ascii')
+                    headers = {
+                        'Authorization': f'Basic {creds}'
+                    }
+                    data = {
+                        'grant_type': 'password',
+                        'username': username,
+                        'password': password
+                    }
+                    req = urllib.request.Request(
+                        'http://host.docker.internal:3000/o/token/',
+                        method='POST',
+                        data=urllib.parse.urlencode(data).encode('ascii'),
+                        headers=headers
+                    )
+                    resp = urllib.request.urlopen(req)
+                    data = json.loads(resp.read())
+                    # messages.success(request, data)
+                    redirect_url = request.session.get('callback_url') + '?token=' + data['access_token']
+                    # messages.success(request, redirect_url)
+                    return redirect(redirect_url)
+                else:
+                    return redirect(reverse('users:profile'))
         else:
             messages.error(request, 'username or password not correct')           
     else:
@@ -78,6 +89,14 @@ def user_login(request):
             request.session['callback_url'] = callback_url
             request.session['app_id'] = app_id
             request.session['app_secret'] = app_secret
-        messages.success(request, request.session['callback_url'])
         form = AuthenticationForm()
-    return render(request,'registration/login.html', {'form': form})
+    return render(request, 'registration/login.html', {'form': form})
+
+
+@login_required(login_url=login_url)
+def user_profile(request):
+    user = request.user
+    context = {
+        'user': user,
+    }
+    return render(request, 'profile.html', context)

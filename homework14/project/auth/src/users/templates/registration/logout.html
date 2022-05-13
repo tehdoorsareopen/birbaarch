@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1 class="ui header">Logout</h1>
+
+<div class="ui success message">
+    <div class="header">
+    Success!
+    </div>
+    <p>You have successfully logged out. Now you can <a href="{% url 'users:login' %}">log in again</a></p>
+</div>
+
+{% endblock %}

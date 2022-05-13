@@ -1,0 +1,11 @@
+.main.container {
+    margin-top: 3em;
+}
+
+.ui.table {
+    font-size: 14px;
+}
+
+.ui.menu {
+    border-radius: 0;
+}
