@@ -79,7 +79,7 @@ def user_login(request):
                 else:
                     return redirect(reverse('users:profile'))
         else:
-            messages.error(request, 'username or password not correct')           
+            messages.error(request, 'username or password not correct')
     else:
         callback_url = request.GET.get('callback_url')
         app_id = request.GET.get('id')

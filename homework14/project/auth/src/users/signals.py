@@ -20,37 +20,66 @@ def on_send_error(excp):
 
 
 # CUD Events
-@receiver(post_save, sender=User)
-def produce_create_or_update_user_event(sender, instance, **kwargs):
-    broker = settings.BROKER_SERVER
-    producer = KafkaProducer(bootstrap_servers=broker)
-    user = instance
-    data = {
-        'event': 'created/updated',
-        'user': {
-            'system_id': user.system_id,
-            'username': user.username,
-            'first_name': user.first_name,
-            'last_name': user.last_name,
-            'role': user.role.name,
-        }
-    }
 
-    serialized_data = pickle.dumps(data, pickle.HIGHEST_PROTOCOL)
-    producer.send('users-stream', serialized_data).add_callback(on_send_success).add_errback(on_send_error)
+@receiver(post_save, sender=User)
+def produce_user_created_event(sender, instance, created, **kwargs):
+    if created:
+        broker = settings.BROKER_SERVER
+        producer = KafkaProducer(bootstrap_servers=broker)
+        user = instance
+        data = {
+            'event_name': 'user_created',
+            'data': {
+                'system_id': user.system_id,
+                'username': user.username,
+                'first_name': user.first_name,
+                'last_name': user.last_name,
+                'role': user.role.name,
+            }
+        }
+
+        serialized_data = pickle.dumps(data, pickle.HIGHEST_PROTOCOL)
+        producer.send(
+            'users-stream', serialized_data
+        ).add_callback(on_send_success).add_errback(on_send_error)
+
+
+@receiver(post_save, sender=User)
+def produce_user_updated_event(sender, instance, created, **kwargs):
+    if not created:
+        broker = settings.BROKER_SERVER
+        producer = KafkaProducer(bootstrap_servers=broker)
+        user = instance
+        data = {
+            'event_name': 'user_updated',
+            'data': {
+                'system_id': user.system_id,
+                'username': user.username,
+                'first_name': user.first_name,
+                'last_name': user.last_name,
+                'role': user.role.name,
+            }
+        }
+
+        serialized_data = pickle.dumps(data, pickle.HIGHEST_PROTOCOL)
+        producer.send(
+            'users-stream', serialized_data
+        ).add_callback(on_send_success).add_errback(on_send_error)
 
 
 @receiver(post_delete, sender=User)
-def produce_delete_user_event(sender, instance, **kwargs):
+def produce_user_deleted_event(sender, instance, **kwargs):
     broker = settings.BROKER_SERVER
     producer = KafkaProducer(bootstrap_servers=broker)
     user = instance
     data = {
-        'event': 'deleted',
-        'user': {
+        'event_name': 'user_deleted',
+        'data': {
             'system_id': user.system_id,
         }
     }
 
     serialized_data = pickle.dumps(data, pickle.HIGHEST_PROTOCOL)
-    producer.send('users-stream', serialized_data).add_callback(on_send_success).add_errback(on_send_error)
+    producer.send(
+        'users-stream', serialized_data
+    ).add_callback(on_send_success).add_errback(on_send_error)

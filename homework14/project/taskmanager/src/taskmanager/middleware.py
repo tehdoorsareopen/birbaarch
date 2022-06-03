@@ -73,4 +73,3 @@ class AppAuthMiddleware:
         }
         redirect_url = self.auth_app_login_form_url + '?' + urllib.parse.urlencode(qparams)
         return redirect(redirect_url)
-

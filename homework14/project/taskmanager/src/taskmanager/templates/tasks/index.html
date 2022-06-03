@@ -21,8 +21,14 @@
       <td>{{ task.description }}</td>
       <td>{{ task.created_by }}</td>
       <td>{{ task.assigned_on }}</td>
-      <td>{{ task.completed }}</td>
-      <td>{{ task.created|date:'Y-m-d' }}</td>
+      <td>
+        {% if task.completed %}
+        <i class="green check circle icon"></i>
+        {% else %}
+        <i class="red circle outline icon"></i>
+        {% endif%}
+      </td>
+      <td>{{ task.created|date:'Y-m-d H:i' }}</td>
     </tr>
     {% endfor %}
   </tbody>

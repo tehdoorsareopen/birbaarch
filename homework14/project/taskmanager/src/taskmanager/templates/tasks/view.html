@@ -1,6 +1,26 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1 class="ui header">View task {{ task.name }}</h1>
+<h1 class="ui header">Task</h1>
 
+<div class="ui segment" bis_skin_checked="1">
+    <form class="ui form" method="post" action="{% url 'taskmanager:complete_task' task.pk %}">
+        {% csrf_token %}
+        <div class="field">
+            <label>Name</label>
+            {{ task.name }}
+        </div>
+        <div class="field">
+            <label>Description</label>
+            {{ task.description }}
+        </div>
+        <div class="field">
+            <label>Assigned on</label>
+            {{ task.assigned_on }}
+        </div>
+        {% if user == task.assigned_on and not task.completed %}
+        <button class="ui fluid primary button" type="submit">Complete</button>
+        {% endif %}
+    </form>
+</div>
 {% endblock %}

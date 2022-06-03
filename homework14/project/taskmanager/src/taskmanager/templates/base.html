@@ -21,11 +21,11 @@
           <a class="item" href="{% url 'taskmanager:index' %}">All tasks</a>
           <a class="item" href="{% url 'taskmanager:my_tasks' %}">My tasks</a>
           <div class="item" bis_skin_checked="1">
-            <a class="button primary" href="{% url 'taskmanager:create_task' %}">Create task</a>
+            <a class="button primary" href="{% url 'taskmanager:create_task' %}">Create</a>
           </div>
           {% if user.role == 'admin' %}
             <div class="item" bis_skin_checked="1">
-              <a class="button reassign" href="{% url 'taskmanager:create_task' %}">Reassign</a>
+              <a class="button reassign" href="{% url 'taskmanager:reassign_tasks' %}">Reassign</a>
             </div>
           {% endif %}
         {% endif %}

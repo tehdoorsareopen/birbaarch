@@ -30,14 +30,14 @@ curl -X POST -d "grant_type=password&username=test&password=test12345" -u"m3vbKH
 docker exec broker \
 kafka-topics --bootstrap-server broker:9092 \
              --create \
-             --topic BirbTopic
+             --topic tasks
 
 docker exec --interactive --tty broker \
 kafka-console-consumer --bootstrap-server broker:9092 \
-                       --topic BirbTopic \
+                       --topic tasks \
                        --from-beginning
 
 docker exec --interactive --tty broker \
 kafka-console-producer --bootstrap-server broker:9092 \
-                       --topic BirbTopic
+                       --topic tasks
 ```
